@@ -1,0 +1,12 @@
+name: env_SRF
+
+channels:
+	conda-forge
+	biocoda
+	defaults
+	R
+
+dependencies:
+	R=4.1
+	dplyr=1.0.10
+	RandomForestsGLS=0.1.4

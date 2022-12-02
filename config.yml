@@ -1,12 +1,9 @@
-name: env_SRF
+name: spatial_random_forest
 
-channels:
-	conda-forge
-	biocoda
-	defaults
-	R
-
+channels: 
+- conda-forge
+- R
 dependencies:
-	R=4.1
-	dplyr=1.0.10
-	RandomForestsGLS=0.1.4
+- r-essentials
+- r-base=4.1
+- r-dplyr

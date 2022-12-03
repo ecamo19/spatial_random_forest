@@ -2,18 +2,16 @@ name: spatial_random_forest
 
 channels: 
 - conda-forge
-- R
+- r
 - ecamo19
 dependencies:
-- r-essentials
+- r-essentials=3.6.0
 - r-base=4.1
 - r-dplyr=1.0.10
 - r-randomforestsgls=0.1.4
 - r-furrr=0.3.1
 - r-purrr=0.3.5
 - r-tidyr=1.2.1
-- shap=0.41.0
-- parallel=20221122
 - r-ggplot2=3.4.0
 - r-tibble=3.1.8
 - r-stringr=1.4.0
@@ -21,3 +19,5 @@ dependencies:
 - r-magrittr=2.0.3
 - r-fastshap=0.0.7
 - r-devtools=2.4.5
+- shap=0.41.0
+- parallel=20221122

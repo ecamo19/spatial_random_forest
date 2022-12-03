@@ -1,5 +1,4 @@
 name: spatial_random_forest
-
 channels: 
 - conda-forge
 - r

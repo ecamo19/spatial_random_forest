@@ -42,3 +42,6 @@ vignettes/*.pdf
 env
 raw_data
 data
+
+# Files
+*.Rmd

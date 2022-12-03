@@ -40,3 +40,5 @@ vignettes/*.pdf
 
 # Folders
 env
+raw_data
+data

@@ -20,3 +20,4 @@ dependencies:
 - r-here=1.0.1
 - r-magrittr=2.0.3
 - r-fastshap=0.0.7
+- r-devtools=2.4.5

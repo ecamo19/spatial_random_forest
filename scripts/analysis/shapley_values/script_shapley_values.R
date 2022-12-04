@@ -40,7 +40,7 @@ get_predic <- function(object, newdata) {
 ## Set parallel env  -----------------------------------------------------------
 
 # Initiate cluster
-cl <- parallel::makeCluster(detectCores()-1, type = "FORK")
+cl <- parallel::makeCluster(detectCores() - 1, type = "FORK")
 
 doParallel::registerDoParallel(cl)
 

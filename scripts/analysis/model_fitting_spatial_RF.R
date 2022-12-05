@@ -1,5 +1,5 @@
 # Set WD for running the code in the Terminal ----------------------------------
-here::i_am("scripts/models_spatial_random_forest/model_fitting_spatial_RF.R")
+here::i_am("scripts/analysis/model_fitting_spatial_RF.R")
 setwd(here::here())
 
 # Load packages ----------------------------------------------------------------
@@ -8,6 +8,7 @@ library(parallel)
 library(purrr)
 library(furrr)
 library(tidyr)
+library(GpGp)
 
 # Seed for reproducibility -----------------------------------------------------
 
@@ -22,7 +23,7 @@ nextRNGSubStream(s)
 
 # Load  ------------------------------------------------------------------------
 source("./scripts/data_cleaned.R")
-source("./scripts/models_spatial_random_forest/function_spatial_random_forest.R")
+source("./R/function_spatial_random_forest.R")
 
 # Tuning Random Forest hyperparameters -----------------------------------------
 
@@ -41,18 +42,18 @@ tuning_param  <-
 ## Tuning parameters -----------------------------------------------------------
 
 #tuning_param_redun  <-
-    tuning_param %>%
-        mutate(mse = pmap(tuning_param,
-                          ~ with(list(...),
-                                 spatial_random_forest(y = y_redun,
-                                                       coords = coords,
-                                                       predictors = predictors,
-                                                       mtry = mtry,
-                                                       ntree = 3000,
-                                                       nthsize = nthsize)$mse))
-    ) %>% 
-    unnest(cols = c(mse)) %>%
-    arrange(mse)
+#    tuning_param %>%
+#        mutate(mse = pmap(tuning_param,
+#                          ~ with(list(...),
+#                                 spatial_random_forest(y = y_redun,
+#                                                       coords = coords,
+#                                                       predictors = predictors,
+#                                                       mtry = mtry,
+#                                                       ntree = 30,
+#                                                       nthsize = nthsize)$mse))
+#    ) %>% 
+#    unnest(cols = c(mse)) %>%
+#    arrange(mse)
 
 
 ## Model fitting ---------------------------------------------------------------
@@ -75,21 +76,24 @@ save(model_spatial_random_forest_redundancy,
 
 ## Tuning parameters -----------------------------------------------------------
 
-tuning_param %>%
-     mutate(mse = pmap(tuning_param,
+#tuning_param %>%
+#     mutate(mse = pmap(tuning_param,
                        ~ with(list(...),
                               spatial_random_forest(y = y_fdis,
                                                     coords = coords,
                                                     predictors = predictors,
                                                     mtry = mtry,
                                                     ntree = 10000,
-                                                    nthsize = nthsize)$mse))) %>%
-      unnest(cols = c(mse)) %>%
-      arrange(mse)
+#                                                    nthsize = nthsize)$mse))) %>%
+#      unnest(cols = c(mse)) %>%
+#      arrange(mse)
 
 # Best mtry = 13 nthsize = 10
 
-
+## Get matern parameters -------------------------------------------------------
+# variance, range, smoothness, nugget
+get_start_parms(y = y_fdis, X = as.matrix(predictors), locs = as.matrix(coords), 
+                                            covfun_name = "matern_isotropic") 
 
 ## Model fitting ---------------------------------------------------------------
 

@@ -1,0 +1,6 @@
+rule run_spatial_random_forests:
+        input:
+                "~/data/"  
+        output:
+        parms:
+        shell:

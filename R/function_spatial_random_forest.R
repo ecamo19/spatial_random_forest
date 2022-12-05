@@ -1,7 +1,14 @@
 # This function fits a spatial random forest and calculates the MSE of the model
-spatial_random_forest <- function(y, coords, predictors,mtry, nthsize,ntree, 
-                                  data = NULL) {
-    
+spatial_random_forest <- function(y, coords, predictors, mtry, nthsize, ntree,
+                                                                data = NULL) {
+
+    # Get matern params 
+    # 1 variance (sigma), 2 range (phi), 3 smoothness (nu = v ), 4 nugget(tau2)
+    params <- GpGp::get_start_parms(y = y,
+                    X = as.matrix(predictors), 
+                    locs = as.matrix(coords), 
+                    covfun_name = "matern_isotropic")
+
     spatial_random_forest <- RandomForestsGLS::RFGLS_estimate_spatial(y = y, 
                                                 
                                                 # Predictors 
@@ -20,10 +27,10 @@ spatial_random_forest <- function(y, coords, predictors,mtry, nthsize,ntree,
                                                 # Spatial params (1, 0.1, 5, 
                                                 # 0.5 defaults)
                                                 cov.model = "matern",
-                                                sigma.sq = 1,
-                                                tau.sq = 0.1,
-                                                phi = 5,
-                                                nu = 0.5,
+                                                sigma.sq = params$start_parms[1],
+                                                phi = params$start_parms[2],
+                                                nu = params$start_parms[3],
+                                                tau.sq = params$start_parms[4],
                                                 
                                                 # Tuning parameters
                                                 ntree = ntree,

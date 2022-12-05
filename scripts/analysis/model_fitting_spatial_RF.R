@@ -28,33 +28,34 @@ source("./R/function_spatial_random_forest.R")
 # Tuning Random Forest hyperparameters -----------------------------------------
 
 # Params to search
-#mtry <- list(5, 10, 11, 12, 13)
-#nthsize <- list(10, 20, 30, 40)
+mtry <- list(5, 10, 11, 12, 13)
+nthsize <- list(10, 20, 30, 40)
  
 # Create df
-#tuning_param  <- 
-#      crossing(mtry, nthsize) %>% 
-#      unnest(cols = c(mtry, nthsize)) 
+tuning_param  <- 
+      crossing(mtry, nthsize) %>% 
+      unnest(cols = c(mtry, nthsize)) 
 
 
 # Redundancy model -------------------------------------------------------------
 
 ## Tuning parameters -----------------------------------------------------------
 
-#tuning_param_redun  <-
-#    tuning_param %>%
-#        mutate(mse = pmap(tuning_param,
-#                          ~ with(list(...),
-#                                 spatial_random_forest(y = y_redun,
-#                                                       coords = coords,
-#                                                       predictors = predictors,
-#                                                       mtry = mtry,
-#                                                       ntree = 30,
-#                                                       nthsize = nthsize)$mse))
-#    ) %>% 
-#    unnest(cols = c(mse)) %>%
-#    arrange(mse)
-
+tuning_param_redun  <-
+    tuning_param %>%
+        mutate(mse = pmap(tuning_param,
+                          ~ with(list(...),
+                                 spatial_random_forest(y = y_redun,
+                                                       coords = coords,
+                                                       predictors = predictors,
+                                                       mtry = mtry,
+                                                       ntree = 99,
+                                                       nthsize = nthsize)$mse))
+    ) %>% 
+    unnest(cols = c(mse)) %>%
+    arrange(mse)
+    
+tuning_param_redun
 
 ## Model fitting ---------------------------------------------------------------
 
@@ -63,10 +64,11 @@ model_spatial_random_forest_redundancy <-
                           predictors = predictors,
                           coords = coords, 
                           mtry = 13, 
-                          nthsize = 10, 
-                          ntree = 10000)
+                          nthsize = 12, 
+                          ntree = 15000)
 
-model_spatial_random_forest_redundancy$predicted
+
+model_spatial_random_forest_redundancy$predicted   
 
 save(model_spatial_random_forest_redundancy, 
            file = "./data/rdata_files/model_spatial_random_forest_redundancy.RData")
@@ -76,17 +78,17 @@ save(model_spatial_random_forest_redundancy,
 
 ## Tuning parameters -----------------------------------------------------------
 
-#tuning_param %>%
-#     mutate(mse = pmap(tuning_param,
+tuning_param %>%
+     mutate(mse = pmap(tuning_param,
                        ~ with(list(...),
                               spatial_random_forest(y = y_fdis,
                                                     coords = coords,
                                                     predictors = predictors,
                                                     mtry = mtry,
-                                                    ntree = 10000,
-#                                                    nthsize = nthsize)$mse))) %>%
-#      unnest(cols = c(mse)) %>%
-#      arrange(mse)
+                                                    ntree = 99,
+                                                    nthsize = nthsize)$mse))) %>%
+      unnest(cols = c(mse)) %>%
+      arrange(mse)
 
 # Best mtry = 13 nthsize = 10
 
@@ -96,10 +98,11 @@ model_spatial_random_forest_fdis <-
                           predictors = predictors,
                           coords = coords, 
                           mtry = 13, 
-                          nthsize = 10, 
-                          ntree = 10000)
+                          nthsize = 12, 
+                          ntree = 15000)
 
 model_spatial_random_forest_fdis$predicted
  
 save(model_spatial_random_forest_fdis, 
           file = "./data/rdata_files/model_spatial_random_forest_fdis.RData")
+

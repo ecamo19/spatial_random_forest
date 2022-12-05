@@ -28,13 +28,13 @@ source("./R/function_spatial_random_forest.R")
 # Tuning Random Forest hyperparameters -----------------------------------------
 
 # Params to search
-mtry <- list(5, 10, 11, 12, 13)
-nthsize <- list(10, 20, 30, 40)
+#mtry <- list(5, 10, 11, 12, 13)
+#nthsize <- list(10, 20, 30, 40)
  
 # Create df
-tuning_param  <- 
-      crossing(mtry, nthsize) %>% 
-      unnest(cols = c(mtry, nthsize)) 
+#tuning_param  <- 
+#      crossing(mtry, nthsize) %>% 
+#      unnest(cols = c(mtry, nthsize)) 
 
 
 # Redundancy model -------------------------------------------------------------
@@ -69,7 +69,7 @@ model_spatial_random_forest_redundancy <-
 model_spatial_random_forest_redundancy$predicted
 
 save(model_spatial_random_forest_redundancy, 
-           file = "./scripts/models_spatial_random_forest/model_spatial_random_forest_redundancy.RData")
+           file = "./data/rdata_files/model_spatial_random_forest_redundancy.RData")
 
 
 # FDis model -------------------------------------------------------------------
@@ -90,25 +90,16 @@ save(model_spatial_random_forest_redundancy,
 
 # Best mtry = 13 nthsize = 10
 
-## Get matern parameters -------------------------------------------------------
-# variance, range, smoothness, nugget
-get_start_parms(y = y_fdis, X = as.matrix(predictors), locs = as.matrix(coords), 
-                                            covfun_name = "matern_isotropic") 
-
 ## Model fitting ---------------------------------------------------------------
-
 model_spatial_random_forest_fdis <- 
     spatial_random_forest(y = y_fdis, 
                           predictors = predictors,
                           coords = coords, 
                           mtry = 13, 
                           nthsize = 10, 
-                          
-                          # For some reason this is the max n of tree possible
                           ntree = 10000)
-
 
 model_spatial_random_forest_fdis$predicted
  
 save(model_spatial_random_forest_fdis, 
-          file = "./scripts/models_spatial_random_forest/model_spatial_random_forest_fdis.RData")
+          file = "./data/rdata_files/model_spatial_random_forest_fdis.RData")

@@ -5,8 +5,8 @@ setwd(here::here())
 library(magrittr)
 
 # Load data --------------------------------------------------------------------
-data_complete <- 
-    read.csv("./data/functional_diversity_redundancy_indices/data_functional_diversity.csv") %>% 
+data_complete <-
+    read.csv("./data/functional_diversity_redundancy_indices/data_functional_diversity.csv") %>%
     dplyr::select(-X)
 
 # Clean data -------------------------------------------------------------------
@@ -15,21 +15,21 @@ data_complete <-
 # a corr plot
 
 data_for_analysis <-
-    
-    data_complete %>% 
-    
+
+    data_complete %>%
+
     # Remove predictors
     dplyr::select(-c(elevevation_cat, precdriest,
                      preccv, tempmin, slope_deg, clay,
-                     f_eve,rao_q, plot)) %>% 
-    
+                     f_eve,rao_q, plot)) %>%
+
     # Scale predictors
     # Not necessary anymore
-    #dplyr::mutate(across(!f('c_dis','rendundancy', 'longitude', 'latitude'), 
-    #                     scale)) %>% 
-    
+    #dplyr::mutate(across(!f('c_dis','rendundancy', 'longitude', 'latitude'),
+    #                     scale)) %>%
+
     # Order data set
-    dplyr::select(rendundancy,f_dis, everything()) 
+    dplyr::select(rendundancy,f_dis, everything())
 
 
 ## Response vars ---------------------------------------------------------------
@@ -37,11 +37,17 @@ y_redun <- data_for_analysis$rendundancy
 y_fdis <- data_for_analysis$f_dis
 
 ## Predictors ------------------------------------------------------------------
-predictors <- data_for_analysis %>% dplyr::select(!c(latitude, f_dis, longitude, 
+predictors <- data_for_analysis %>% dplyr::select(!c(latitude, f_dis, longitude,
                                                      rendundancy))
 
 ## Coordiantes -----------------------------------------------------------------
-coords <- data_for_analysis %>% dplyr::select(longitude, latitude) 
+coords <- data_for_analysis %>% dplyr::select(longitude, latitude)
+
+## Plot elevation --------------------------------------------------------------
+elev <-
+    data_complete %>%
+            tibble::rownames_to_column("plot_number") %>%
+            dplyr::select(plot_number, plot, elevevation_cat)
 
 # Remove files -----------------------------------------------------------------
 rm(list = c("data_complete"))

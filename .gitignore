@@ -45,3 +45,6 @@ data
 
 # Files
 *.Rmd
+*.rmd
+*.pdf
+*.DS_Store

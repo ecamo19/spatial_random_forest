@@ -1,7 +1,6 @@
 # Load packages ----------------------------------------------------------------
 library(fastshap)
 library(parallel)
-library(ggplot2)
 
 # Seed for reproducibility -----------------------------------------------------
 
@@ -15,17 +14,19 @@ nextRNGStream(s)
 nextRNGSubStream(s)
 
 # Set WD for running the code in the Terminal ----------------------------------
-here::i_am("scripts/shapley_values/shapley_values.R")
+here::i_am("scripts/analysis/script_shapley_values.R")
 setwd(here::here())
-getwd()
 
 # Load data --------------------------------------------------------------------
 source("./scripts/data_cleaned.R")
+
+# Remove data
 rm(y_fdis, y_redun, data_for_analysis)
 
 # Load spatial RF models -------------------------------------------------------
-#load(file = "./scripts/models_spatial_random_forest/model_spatial_random_forest_fdis.RData")
-load(file = "./scripts/models_spatial_random_forest/model_spatial_random_forest_redundancy.RData")
+load(file = "./data/rdata_files/model_spatial_random_forest_fdis.RData")
+
+#load(file = "./data/rdata_files/model_spatial_random_forest_redundancy.RData")
 
 # Get model's prediction function ----------------------------------------------
 get_predic <- function(object, newdata) {    
@@ -55,7 +56,7 @@ parallel::clusterExport(cl = cl, varlist = c('coords', 'get_predic'),
 clusterEvalQ(cl, library(fastshap))
 
 # Calculate Shapley values for fdis model --------------------------------------
-shapley_values <- explain(object = model_spatial_random_forest_redundancy,
+shapley_values <- explain(object = model_spatial_random_forest_fdis,
                                  X = predictors,
  
                                  pred_wrapper = get_predic,
@@ -77,7 +78,7 @@ parallel::stopCluster(cl)
 
 ## Save shapley values for fdis model ------------------------------------------
 #save(shapley_values, file = "./scripts/shapley_values/shapley_fdis_values.RData")
-save(shapley_values, file = "./scripts/shapley_values/shapley_redundancy_values.RData")
+save(shapley_values, file = "./data/rdata_files/shapley_values_fdis.RData")
 
 # Refs -------------------------------------------------------------------------
 
@@ -85,4 +86,11 @@ save(shapley_values, file = "./scripts/shapley_values/shapley_redundancy_values.
 
 # https://github.com/USGS-R/drb-inland-salinity-ml/blob/main/4_predict/src/train_models.R
 
+# After processing, load Rdata files and convert them into csv
+load(file = "./data/rdata_files/shapley_values_fdis_999.RData")
+write.csv(shapley_values, "./data/rdata_files/shapley_values_fdis_999.csv")
+rm(shapley_values)
+
+load(file = "./data/rdata_files/shapley_values_redundancy_999.RData")
+write.csv(shapley_values, "./data/rdata_files/shapley_values_redundancy_999.csv")
 

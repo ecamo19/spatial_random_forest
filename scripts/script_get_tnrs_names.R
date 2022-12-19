@@ -1,12 +1,11 @@
 # Objective --------------------------------------------------------------------
 # Compare species list with TNRS to get the correct species names
 
-
 # Load packages ----------------------------------------------------------------
 library(purrr)
 library(dplyr)
 library(readr)
-# For taxonomic names
+library(stringr)
 #devtools::install_github('https://github.com/EnquistLab/RTNRS')
 library(TNRS)
 
@@ -48,7 +47,6 @@ tnrs_names(species_list_no_morpho[2,]$genero,
 tnrs_names <- map2_dfr(.x = species_list_no_morpho$genero,
                        .y = species_list_no_morpho$especie,
                        .f = tnrs_names)
-
 
 # Compare names ----------------------------------------------------------------
 

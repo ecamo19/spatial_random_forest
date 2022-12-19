@@ -2,7 +2,7 @@
 # This script takes all the raw files contaning the traits and creates a dataset
 # called traits_db
 
-here::i_am("data_analysis/scripts/data_cleaned.R")
+here::i_am("data_analysis/scripts/trait_db_contruction.R")
 setwd(here::here())
 
 
@@ -29,7 +29,8 @@ library(tibble)
 library(BIOMASS)
 
 # Species list -----------------------------------------------------------------
-source("./scripts/script_full_species_list.R")
+species_list <- read.csv("./data/cleaned_data/species_list.csv") %>%
+        select(-X)
 
 
 ## Full species list -----------------------------------------------------------
@@ -37,12 +38,12 @@ source("./scripts/script_full_species_list.R")
 # Create spcode with the first 4 characters from the genus and the first 2
 # from species
 
-data_species_full_list <-
+species_list <-
 
-    data_species_full_list %>%
+    species_list %>%
 
-        # This step is done for when mophospecies is sp get it and if it is sp
-        # get that 4 characters
+        # Step done if mophospecies name == sp get it,
+        # elif mophospecies name == sp{:digit:} get the 4 characters i.e sp01
         mutate(gen4 = str_extract(genero, "^.{4}"),
                 sp3 = if_else(str_length(especie) == 2, str_extract(especie, "^.{2}"),
                              if_else((str_length(especie) > 2) & (str_length(especie) <= 4) & (str_detect(especie, "^sp")),
@@ -50,6 +51,7 @@ data_species_full_list <-
 
         unite(spcode_4_3, c("gen4","sp3"), sep = "") %>%
         arrange(spcode)
+
 
 
 

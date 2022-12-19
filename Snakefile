@@ -1,7 +1,12 @@
-rule get_species_list
+rule get_species_list:
         input:
-                "./data/raw_data/data_effect_traits.csv"
+                script = "scripts/script_get_species_list.R",
+                data = "data/raw_data/data_effect_traits.csv"
         output:
-                "data_cleaned/species_list.csv'
-        parms:
+                data = "data/cleaned_data/species_list.csv"
         shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data} \
+                        --out {output.data}
+                """

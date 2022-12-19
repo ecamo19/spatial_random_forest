@@ -1,3 +1,8 @@
+rule targets:
+        input:
+                "data/cleaned_data/species_list.csv",
+                "data/cleaned_data/tnrs_names.csv"
+
 rule get_species_list:
         input:
                 script = "scripts/script_get_species_list.R",
@@ -24,16 +29,3 @@ rule get_tnrs_names:
                         --out {output.data}
                 """
 
-
-#rule construct_trait_db:
-#         input:
-#                script = "scripts/",
-#                data = "data/cleaned_data/species_list.csv"
-#        output:
-#                data = "data/cleaned_data/species_list.csv"
-#        shell:
-#                """
-#                Rscript {input.script} \
-#                        --data {input.data} \
-#                        --out {output.data}
-#                """

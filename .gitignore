@@ -42,9 +42,12 @@ vignettes/*.pdf
 env
 raw_data
 data
+.snakemake/
 
 # Files
 *.Rmd
 *.rmd
 *.pdf
 *.DS_Store
+*.log
+

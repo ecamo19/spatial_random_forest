@@ -1,8 +1,7 @@
+here::i_am("scripts/script_get_species_list.R")
 
 # Metadata ---------------------------------------------------------------------
-here::i_am(/)
 # Results of https://tnrs.biendata.org/
-
 
 # Load packages ----------------------------------------------------------------
 library(dplyr)
@@ -19,8 +18,7 @@ library(stringr)
 ## Read data -------------------------------------------------------------------
 raw_data_species_list <-
 
-    read.csv("./data/raw_data/traits/effect_traits/data_effect_traits.csv",
-                                                                header = T) %>%
+    read.csv("./data/raw_data/data_effect_traits.csv",header = T) %>%
 
     # clean column names
     clean_names()
@@ -46,10 +44,9 @@ data_species_full_list <-
     mutate(across(where(is.character), str_to_lower))
 
 ## Number of species -----------------------------------------------------------
-
 print(paste0("The total number of species (species and morpho-species) is: ",
              dim(data_species_full_list)[1]))
 
-# Remove files except the one that is useful -----------------------------------
-rm(raw_data_species_list)
 
+# Save species list  -----------------------------------------------------------
+write.csv(data_species_full_list, "./data/cleaned_data/species_list.csv")

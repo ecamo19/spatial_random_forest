@@ -42,7 +42,7 @@ vignettes/*.pdf
 env
 raw_data
 data
-.snakemake/
+.snakemake
 
 # Files
 *.Rmd

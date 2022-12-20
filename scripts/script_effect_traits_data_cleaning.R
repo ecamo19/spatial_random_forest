@@ -15,7 +15,7 @@ library(stringr)
 
 ## AGB data --------------------------------------------------------------------
 raw_traits_effect_data <-
-    read.csv("./data/raw_data/traits/effect_traits/data_effect_traits.csv") %>%
+    read.csv("./data/raw_data/traits/effect_traits/raw_effect_traits.csv") %>%
 
         clean_names() %>%
         dplyr::select(4:10) %>%

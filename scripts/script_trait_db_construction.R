@@ -21,8 +21,7 @@ library(stringr)
 library(tabulizer)
 # For adding columns
 library(tibble)
-# For wood density estimation
-library(BIOMASS)
+
 
 # Species list -----------------------------------------------------------------
 species_list <- read.csv("./data/cleaned_data/species_list.csv", header = TRUE) %>%
@@ -585,50 +584,49 @@ reproductive_traits_255 <-
 
 # Get Wood density -------------------------------------------------------------
 
-# Separate accepted name into genus and species
-wood_density_sp_list <-
-        morpho_species %>%
-
-        # Create column for joining the datasets
-        unite(accepted_species, genero, especie, sep = " ") %>%
-
-
-        # Join morpho-species with species with a full name n = 256
-        full_join(., species_list_updated, by = c("accepted_species", "spcode")) %>%
-
-        # Get column the accepted_species with morpho species n = 256
-        select(accepted_species) %>%
-
-        # Create columns for the function getWoodDensity
-        separate(accepted_species, c("genus", "specie"), sep = " ",
-                                        remove = FALSE)
-
-## Get wood density values
-wood_density_255 <-
-        getWoodDensity(genus = wood_density_sp_list$genus,
-                species = wood_density_sp_list$specie,
-                region = c("CentralAmericaTrop", "SouthAmericaTrop"))  %>%
-
-        group_by(genus, species) %>%
-
-        # Name morpho-species in a sequential manner
-        mutate(species = if_else(species == "NA", paste0("sp", row_number()),
-                                                                species))  %>%
-
-        # Arrange columns and clean names
-        select(1:3, levelWD, everything())  %>%
-        clean_names() %>%
-        arrange(genus, species) %>%
-        unite(accepted_species, c("genus", "species"), sep = " ") %>%
-        select(-family) %>%
-        arrange(accepted_species)
-
-## Exclude morpho-species
-wood_density_190 <-
-        wood_density_255 %>%
-                inner_join(., species_list_updated, by = "accepted_species") %>%
-                select(name_submitted, accepted_species,spcode, spcode_4_3, mean_wd)
-
+## Separate accepted name into genus and species
+#wood_density_sp_list <-
+#        morpho_species %>%
+#
+#        # Create column for joining the datasets
+#        unite(accepted_species, genero, especie, sep = " ") %>%
+#
+#
+#        # Join morpho-species with species with a full name n = 256
+#        full_join(., species_list_updated, by = c("accepted_species", "spcode")) %>%
+#
+#        # Get column the accepted_species with morpho species n = 256
+#        select(accepted_species) %>%
+#
+#        # Create columns for the function getWoodDensity
+#        separate(accepted_species, c("genus", "specie"), sep = " ",
+#                                        remove = FALSE)
+#
+### Get wood density values
+#wood_density_255 <-
+#        getWoodDensity(genus = wood_density_sp_list$genus,
+#                species = wood_density_sp_list$specie,
+#                region = c("CentralAmericaTrop", "SouthAmericaTrop"))  %>%
+#
+#        group_by(genus, species) %>%
+#
+#        # Name morpho-species in a sequential manner
+#        mutate(species = if_else(species == "NA", paste0("sp", row_number()),
+#                                                                species))  %>%
+#
+#        # Arrange columns and clean names
+#        select(1:3, levelWD, everything())  %>%
+#        clean_names() %>%
+#        arrange(genus, species) %>%
+#        unite(accepted_species, c("genus", "species"), sep = " ") %>%
+#        select(-family) %>%
+#        arrange(accepted_species)
+#
+### Exclude morpho-species
+#wood_density_190 <-
+#        wood_density_255 %>%
+#                inner_join(., species_list_updated, by = "accepted_species") %>%
+#                select(name_submitted, accepted_species,spcode, spcode_4_3, mean_wd)
 
 # Get leaf P and N traits ------------------------------------------------------
 
@@ -652,24 +650,18 @@ effect_traits_190 <-
         select(name_submitted, accepted_species, everything())
 
 # Trait DB ---------------------------------------------------------------------
-#traits_db_190 <-
-        inner_join(wood_density_190, effect_traits_190, by = c("spcode",
-                                                                "spcode_4_3",
-                                                                "name_submitted",
-                                                                "accepted_species")) %>%
+traits_db_190 <-
 
-        inner_join(., reproductive_traits_255, by = c("spcode", "spcode_4_3",
+        inner_join(effect_traits_190, reproductive_traits_255, by = c("spcode",
+                                                                    "spcode_4_3",
                                                         "accepted_species")) %>%
 
         mutate(n_p_ratio = n_mgg_1/p_mgg_1) %>%
 
-        rename(wood_density_gcm3_1 = mean_wd,
+        rename(wood_density_gcm3_1 = dm_gcm3_1,
                 leaf_area_mm2 = af_mm2,
                 sla_mm2mg_1 = afe_mm2mg_1,
-                ldmc_mgg_1 = cfms_mgg_1) %>%
+                ldmc_mgg_1 = cfms_mgg_1)
 
-        select(-c(dm_gcm3_1))
-
-print("worked")
 # Save db ----------------------------------------------------------------------
-#write.csv(traits_db_190, "./data/cleaned_data/db_traits_190.csv")
+write.csv(traits_db_190, "./data/cleaned_data/db_traits_190.csv")

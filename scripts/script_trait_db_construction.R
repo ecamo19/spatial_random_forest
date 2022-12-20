@@ -3,7 +3,6 @@
 # called traits_db
 here::i_am("data_analysis/scripts/script_trait_db_construction.R")
 
-
 # Load Packages ----------------------------------------------------------------
 library(janitor)
 library(dplyr)

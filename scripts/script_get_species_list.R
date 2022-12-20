@@ -18,7 +18,7 @@ library(stringr)
 ## Read data -------------------------------------------------------------------
 raw_data_species_list <-
 
-    read.csv("./data/raw_data/data_effect_traits.csv",header = T) %>%
+    read.csv("./data/raw_data/raw_effect_traits.csv",header = T) %>%
 
     # clean column names
     clean_names()

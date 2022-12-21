@@ -56,3 +56,13 @@ rule create_traits_db:
                         --data {input.data_6} \
                         --out {output.data}
                 """
+
+rule create_env_data_cleaned:
+
+rule create_species_abundance_data_cleaned:
+
+rule create_plot_agb_data_cleaned:
+
+rule create_functional_diversity_data_cleaned:
+
+rule create_data_set_for_stats_cleaned:

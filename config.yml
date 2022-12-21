@@ -27,5 +27,6 @@ dependencies:
 - radian=0.6.4
 - libgdal=3.6.1
 - snakemake=7.19.1
+- graphviz=2.50.0
 
 

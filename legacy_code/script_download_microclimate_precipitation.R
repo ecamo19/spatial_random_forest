@@ -15,14 +15,13 @@ parcelas_lon_lat <- read.csv("~/Documents/projects/redundancy_and_diversity_acro
 # Function for downloading data  -----------------------------------------------
 
 get_daily_precip <- function(data){
-        
-            dailyprecipNCEP(long = data$longitude, 
+
+            dailyprecipNCEP(long = data$longitude,
                             lat = data$latitude,
-                            
-                            # TEST
+
                             reanalysis2 = TRUE,
                             tme = seq(ymd("19800101"),
-                                      ymd("20111231"), 
+                                      ymd("20111231"),
                                       by = "day"))
 }
 
@@ -44,4 +43,5 @@ daily_precip_1980_2011 <-
                 furrr::future_map(.,get_daily_precip)
 
 # Save data --------------------------------------------------------------------
-save(daily_precip_1980_2011, file = "~/Documents/projects/redundancy_and_diversity_across_elevation/stats/data/raw_data/microclimate/raw_daily_precip_1980_2011.RData")
+#save(daily_precip_1980_2011, file = "~/Documents/projects/redundancy_and_diversity_across_elevation/stats/data/raw_data/microclimate/raw_daily_precip_1980_2011.RData")
+

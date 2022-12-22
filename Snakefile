@@ -70,10 +70,13 @@ rule create_env_data:
                         --data {input.data} \
                         --out {output.data}
                 """
-#rule create_species_abundance_data_cleaned:
+#rule create_species_abundance_data:
+#Remember to remove sps
 
-#rule create_plot_agb_data_cleaned:
+#rule create_agb_by_plot_data:
+#Remember to remove sps
 
-#rule create_functional_diversity_data_cleaned:
 
-#rule create_data_set_for_stats_cleaned:
+#rule create_functional_diversity_data:
+
+#rule create_data_set_for_stats:

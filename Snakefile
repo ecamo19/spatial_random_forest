@@ -6,7 +6,8 @@ rule targets:
                 "data/raw_data/raw_chazdon_2003.html",
                 "data/raw_data/raw_nzamora_original.xlsx",
                 "data/raw_data/raw_data_vargas.RData",
-                "data/cleaned_data/db_traits_190.csv"
+                "data/cleaned_data/db_traits_190.csv",
+                "data/cleaned_data/env_data.csv"
 
 rule get_species_list:
         input:
@@ -57,8 +58,18 @@ rule create_traits_db:
                         --out {output.data}
                 """
 
-rule create_env_data_cleaned:
-
+rule create_env_data:
+        input:
+                script = "scripts/script_create_env_data.R",
+                data = "data/raw_data/raw_plot_enviroment.xlsx"
+        output:
+                data = "data/cleaned_data/env_data.csv"
+        shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data} \
+                        --out {output.data}
+                """
 #rule create_species_abundance_data_cleaned:
 
 #rule create_plot_agb_data_cleaned:

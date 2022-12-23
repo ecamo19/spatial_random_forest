@@ -130,8 +130,7 @@ species_list_updated <-
         select(-taxonomic_status)
 
 # Save data --------------------------------------------------------------------
-write_csv(tnrs_names, "./data/cleaned_data/tnrs_names.csv", col_names = TRUE)
+write.csv(tnrs_names, "./data/cleaned_data/tnrs_names.csv")
 
-write_csv(species_list_updated, "./data/cleaned_data/species_list_updated.csv",
-                                                                col_names = TRUE)
+write.csv(species_list_updated, "./data/cleaned_data/species_list_updated.csv")
 

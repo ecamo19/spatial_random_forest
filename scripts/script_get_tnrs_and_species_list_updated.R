@@ -133,4 +133,3 @@ species_list_updated <-
 write.csv(tnrs_names, "./data/cleaned_data/tnrs_names.csv")
 
 write.csv(species_list_updated, "./data/cleaned_data/species_list_updated.csv")
-

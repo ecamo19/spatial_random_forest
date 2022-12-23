@@ -1,6 +1,6 @@
 rule targets:
         input:
-                "data/cleaned_data/species_list.csv",
+                "data/cleaned_data/original_species_list.csv",
                 "data/cleaned_data/tnrs_names.csv",
                 "data/raw_data/raw_salgado_original.xls",
                 "data/raw_data/raw_chazdon_2003.html",
@@ -14,7 +14,7 @@ rule get_species_list:
                 script = "scripts/script_get_species_list.R",
                 data = "data/raw_data/raw_effect_traits.csv"
         output:
-                data = "data/cleaned_data/species_list.csv"
+                data = "data/cleaned_data/original_species_list.csv"
         shell:
                 """
                 Rscript {input.script} \
@@ -25,7 +25,7 @@ rule get_species_list:
 rule get_tnrs_names:
         input:
                 script = "scripts/script_get_tnrs_names.R",
-                data = "data/cleaned_data/species_list.csv"
+                data = "data/cleaned_data/original_species_list.csv"
         output:
                 data = "data/cleaned_data/tnrs_names.csv"
         shell:

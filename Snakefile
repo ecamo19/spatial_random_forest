@@ -22,7 +22,7 @@ rule get_species_list:
                         --out {output.data}
                 """
 
-rule get_tnrs_names:
+rule get_updated_species_names:
         input:
                 script = "scripts/script_get_tnrs_names.R",
                 data = "data/cleaned_data/original_species_list.csv"

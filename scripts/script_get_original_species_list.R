@@ -1,4 +1,4 @@
-here::i_am("scripts/script_get_species_list.R")
+here::i_am("scripts/script_get_original_species_list.R")
 
 # Metadata ---------------------------------------------------------------------
 # Results of https://tnrs.biendata.org/

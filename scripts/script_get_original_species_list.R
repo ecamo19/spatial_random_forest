@@ -29,7 +29,9 @@ data_species_full_list <-
 
     # Convert
     as_tibble(raw_data_species_list) %>%
+
     mutate(spcode = coespec) %>%
+
     select(familia, genero, especie, spcode) %>%
 
     # Replace all spaces and dots with _
@@ -41,7 +43,10 @@ data_species_full_list <-
                   replacement = "")) %>%
 
     # Set levels to lower case
-    mutate(across(where(is.character), str_to_lower))
+    mutate(across(where(is.character), str_to_lower)) %>%
+     # Remove species
+    filter(!spcode %in% c("brospa", "hirtme", "ruptca", "quetoc", "maytgu"))
+
 
 ## Number of species -----------------------------------------------------------
 print(paste0("The total number of species (species and morpho-species) is: ",

@@ -526,14 +526,21 @@ effect_traits_190 <-
         original_species_list  %>%
         inner_join(., raw_traits_effect_data, by = c("spcode" = "coespec")) %>%
         inner_join(., species_list_updated, by = c( "spcode")) %>%
-        select(name_submitted, accepted_species, everything())
+        select(name_submitted, accepted_species, spcode, spcode_4_3,
+                                                                everything(),
+                                                                -c(X, familia,
+                                                                    genero,
+                                                                    especie))
+
 
 # Trait DB ---------------------------------------------------------------------
 traits_db_190 <-
-
         inner_join(effect_traits_190, reproductive_traits_255, by = c("spcode",
                                                                     "spcode_4_3",
                                                         "accepted_species")) %>%
+
+        # No idea why this column keeps showing
+        select(-X) %>%
 
         mutate(n_p_ratio = n_mgg_1/p_mgg_1) %>%
 

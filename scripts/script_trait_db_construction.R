@@ -22,84 +22,12 @@ library(tabulizer)
 library(tibble)
 
 
-# Species list -----------------------------------------------------------------
-species_list <- read.csv("./data/cleaned_data/species_list.csv", header = TRUE) %>%
-                select(-X)
+# Species list updated ---------------------------------------------------------
+species_list_updated <- read.csv("./data/cleaned_data/species_list_updated.csv",
+                            header = TRUE)
 
-# Taxonomic name resolution service --------------------------------------------
-tnrs_species_list <- read.csv("./data/cleaned_data/tnrs_names.csv", header = TRUE) %>%
-                        clean_names()
-
-# Full species list -----------------------------------------------------------
-
-# Create spcode with the first 4 characters from the genus and the first 3
-# letters from species
-
-species_list_new_spcodes <-
-    species_list %>%
-
-        # Step done if mophospecies name == sp get it,
-        # elif mophospecies name == sp{:digit:} get the 4 characters i.e sp01
-
-        # First get the first 4 letters from the genus
-        mutate(gen4 = str_extract(genero, "^.{4}"),
-
-                # get the first 3 letters from the species
-                sp3 = if_else(str_length(especie) == 2,
-                                        str_extract(especie, "^.{2}"), # nolint
-
-                                        if_else((str_length(especie) > 2) & (str_length(especie) <= 4) & (str_detect(especie, "^sp")), # nolint
-
-                                     # Extract
-                                     str_extract(especie, "^.{4}"),
-
-                                     # ELSE
-                                     str_extract(especie, "^.{3}")))) %>%
-
-        unite(spcode_4_3, c("gen4", "sp3"), sep = "") %>%
-        arrange(spcode)
-
-# Get only the spcodes and names -----------------------------------------------
-names_spcodes <-
-    species_list_new_spcodes %>%
-        mutate(genero = str_to_title(genero)) %>%
-
-        # Create name_submitted column
-        unite(name_submitted, c(genero, especie), sep = " ", remove = FALSE) %>%
-
-        # Remove morphospecies
-        filter(!(str_detect(especie, "^sp") & (str_length(especie) <= 4))) %>%
-
-        select(-c(genero, especie, familia))
-
-# Add spcodes 4-3 to the TNRS file ---------------------------------------------
-tnrs_species_list <-
-    tnrs_species_list %>%
-        select(-id) %>%
-        inner_join(., names_spcodes, by = "name_submitted") %>%
-        select(spcode, spcode_4_3, everything())
-
-# Full species list with new spcodes -------------------------------------------
-# This list only shows the accepted name and the old name
-species_list_updated <-
-    tnrs_species_list %>%
-
-        # Species' name manually changed
-        mutate(accepted_species = case_when(
-            name_submitted == "Billia colombiana" ~ "Putzeysia rosea",
-            name_submitted == "Hyeronima oblonga" ~ "Stilaginella oblonga",
-            TRUE ~ accepted_species))  %>%
-
-        select(spcode, spcode_4_3, name_submitted, taxonomic_status,
-               accepted_species) %>%
-        arrange(name_submitted) %>%
-
-        # In this list Brosimum panamense is treat as a different species
-        # and is not. Removed
-        filter(!name_submitted == "Brosimum panamense",
-               !name_submitted == "Hirtella media") %>%
-
-        select(-taxonomic_status)
+original_species_list <- read.csv("./data/cleaned_data/original_species_list.csv",
+                                 header = TRUE)
 
 # Get Reproductive traits ------------------------------------------------------
 # In this section I got the reproductive traits for the species in the list and
@@ -109,7 +37,6 @@ species_list_updated <-
 ## Species with traits in Salgado dataset --------------------------------------
 
 ## Load data
-
 raw_salgado_traits <-
                 read_xls("./data/raw_data/raw_salgado_original.xls") %>%
                 clean_names()
@@ -494,7 +421,7 @@ data_vargas_traits <-
 
 ## Get morpho-species ----------------------------------------------------------
 morpho_species <-
-        species_list %>%
+        original_species_list %>%
 
         # Get morphospecies
         filter((str_detect(especie, "^sp") & (str_length(especie) <= 4)))  %>%
@@ -581,52 +508,6 @@ reproductive_traits_255 <-
         arrange(accepted_species)  %>%
         select(accepted_species, spcode, spcode_4_3, everything(), -c(genero, source))
 
-# Get Wood density -------------------------------------------------------------
-
-## Separate accepted name into genus and species
-#wood_density_sp_list <-
-#        morpho_species %>%
-#
-#        # Create column for joining the datasets
-#        unite(accepted_species, genero, especie, sep = " ") %>%
-#
-#
-#        # Join morpho-species with species with a full name n = 256
-#        full_join(., species_list_updated, by = c("accepted_species", "spcode")) %>%
-#
-#        # Get column the accepted_species with morpho species n = 256
-#        select(accepted_species) %>%
-#
-#        # Create columns for the function getWoodDensity
-#        separate(accepted_species, c("genus", "specie"), sep = " ",
-#                                        remove = FALSE)
-#
-### Get wood density values
-#wood_density_255 <-
-#        getWoodDensity(genus = wood_density_sp_list$genus,
-#                species = wood_density_sp_list$specie,
-#                region = c("CentralAmericaTrop", "SouthAmericaTrop"))  %>%
-#
-#        group_by(genus, species) %>%
-#
-#        # Name morpho-species in a sequential manner
-#        mutate(species = if_else(species == "NA", paste0("sp", row_number()),
-#                                                                species))  %>%
-#
-#        # Arrange columns and clean names
-#        select(1:3, levelWD, everything())  %>%
-#        clean_names() %>%
-#        arrange(genus, species) %>%
-#        unite(accepted_species, c("genus", "species"), sep = " ") %>%
-#        select(-family) %>%
-#        arrange(accepted_species)
-#
-### Exclude morpho-species
-#wood_density_190 <-
-#        wood_density_255 %>%
-#                inner_join(., species_list_updated, by = "accepted_species") %>%
-#                select(name_submitted, accepted_species,spcode, spcode_4_3, mean_wd)
-
 # Get leaf P and N traits ------------------------------------------------------
 
 ## Load raw data
@@ -642,10 +523,9 @@ raw_traits_effect_data <-
 
 ## Read trait data to get new spcodes ------------------------------------------
 effect_traits_190 <-
-        names_spcodes %>%
+        original_species_list  %>%
         inner_join(., raw_traits_effect_data, by = c("spcode" = "coespec")) %>%
-        inner_join(., species_list_updated, by = c("name_submitted", "spcode",
-                                                                "spcode_4_3")) %>%
+        inner_join(., species_list_updated, by = c( "spcode")) %>%
         select(name_submitted, accepted_species, everything())
 
 # Trait DB ---------------------------------------------------------------------

@@ -11,7 +11,7 @@ rule targets:
 
 rule get_original_species_list:
         input:
-                script = "scripts/script_get_species_list.R",
+                script = "scripts/script_get_original_species_list.R",
                 data = "data/raw_data/raw_effect_traits.csv"
         output:
                 data = "data/cleaned_data/original_species_list.csv"

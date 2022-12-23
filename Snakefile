@@ -9,7 +9,7 @@ rule targets:
                 "data/cleaned_data/db_traits_190.csv",
                 "data/cleaned_data/env_data.csv"
 
-rule get_species_list:
+rule get_original_species_list:
         input:
                 script = "scripts/script_get_species_list.R",
                 data = "data/raw_data/raw_effect_traits.csv"
@@ -27,12 +27,14 @@ rule get_updated_species_names:
                 script = "scripts/script_get_tnrs_names.R",
                 data = "data/cleaned_data/original_species_list.csv"
         output:
-                data = "data/cleaned_data/tnrs_names.csv"
+                data_1 = "data/cleaned_data/tnrs_names.csv",
+                data_2 = "data/cleaned_data/updated_species_list.csv"
         shell:
                 """
                 Rscript {input.script} \
                         --data {input.data} \
-                        --out {output.data}
+                        --out {output.data_1} \
+                        --out {output.data_2}
                 """
 
 rule create_traits_db:

@@ -416,30 +416,33 @@ data_vargas_traits <-
         mutate(sexual_system_modified = case_when(
             sexual_system == "B"  ~ "ssher")) %>%
 
-        add_column(source = "https://sura.ots.ac.cr/florula4/docs/lista_arboles_sindromes_OVR05.pdf")  %>%
-        arrange(genero, especie)
+        add_column(source = "https://sura.ots.ac.cr/florula4/docs/lista_arboles_sindromes_OVR05.pdf")
+
 
 ## Get morpho-species ----------------------------------------------------------
-morpho_species <-
-        original_species_list %>%
-
-        # Get morphospecies
-        filter((str_detect(especie, "^sp") & (str_length(especie) <= 4)))  %>%
-
-        # Set first letter to uppercase
-        mutate(genero = str_to_title(genero)) %>%
-
-        select(-c(familia))  %>%
-        group_by(genero) %>%
-
-        # Name morpho-species in a sequential manner
-        mutate(especie = paste0("sp", row_number())) %>%
-
-        unite("accepted_species", c(genero, especie), sep = " ",
-                                                        remove = FALSE) %>%
-
-        arrange(accepted_species)
-
+#morpho_species <-
+#        original_species_list %>%
+#
+#        # Get morphospecies
+#        filter((str_detect(especie, "^sp") & (str_length(especie) <= 4)))  %>%
+#
+#        arrange(genero)  %>%
+#
+#        # Set first letter to uppercase
+#        mutate(genero = str_to_title(genero))  %>%
+#
+#        group_by(genero)  %>%
+#
+#        # Name morpho-species in a sequential manner
+#        mutate(especie = paste0("sp", row_number()))  %>%
+#
+#        unite("accepted_species", c(genero, especie), sep = " ",
+#                                                        remove = TRUE)
+#        ungroup() %>%
+#        select(-c(familia, X)) %>%
+#        arrange(spcode) %>%
+#        View()
+#
 ## Manual input ----------------------------------------------------------------
 manual_input  <-
     tribble(~spcode, ~spcode_4_3, ~accepted_species, ~genero, ~especie, ~dispersal_syndrome_modified, ~pollination_syndrome_modified, ~sexual_system_modified, ~source,
@@ -453,43 +456,43 @@ manual_input  <-
 reproductive_traits_255 <-
 
         # Salgado data
-        full_join(data_salgado_traits %>% select(-c(name_submitted, genero,
+        full_join(data_salgado_traits %>% select(-c(name_submitted, genero, X,
                                                 especie,dispersal_syndrome,
                                                 pollination_syndrome,
                                                 sexual_system)),
          #Chazdon Data
-                data_chazdon_traits %>% select(-c(name_submitted, genero,
+                data_chazdon_traits %>% select(-c(name_submitted, genero, X,
                                                 especie, dispersal_syndrome,
                                                 pollination_syndrome,
                                                 sexual_system)),
                 by = c("accepted_species", "dispersal_syndrome_modified",
                         "pollination_syndrome_modified",
                         "sexual_system_modified", "source","spcode",
-                        "spcode_4_3")) %>%
+                        "spcode_4_3"))  %>%
 
         # Zamora data
-        full_join(., data_zamora_traits %>% select(-c(name_submitted, genero,
+        full_join(., data_zamora_traits %>% select(-c(name_submitted, genero, X,
                                                 especie, dispersal_syndrome,
                                                 pollination_syndrome,
                                                 sexual_system)),
                 by = c("accepted_species", "dispersal_syndrome_modified",
                         "pollination_syndrome_modified",
                         "sexual_system_modified", "source", "spcode",
-                        "spcode_4_3")) %>%
+                        "spcode_4_3"))  %>%
 
         # Vargas data
-        full_join(., data_vargas_traits %>% select(-c(name_submitted, genero,
-                                                        especie,
+        full_join(., data_vargas_traits %>% select(-c(name_submitted, genero,X,
+                                                        poli_viento,
                                                         sexual_system)),
                 by = c("accepted_species", "dispersal_syndrome_modified",
                                         "pollination_syndrome_modified",
                                         "sexual_system_modified", "source",
-                                        "spcode", "spcode_4_3")) %>%
+                                        "spcode", "spcode_4_3"))  %>%
 
         # Add morpho species
         # Here column genero is generated
-        full_join(., morpho_species %>% select(-c(genero, especie)),
-                by = c("accepted_species", "spcode"))  %>%
+        #full_join(., morpho_species,
+        #        by = c("accepted_species", "spcode")) %>%
 
         # Manual input
         full_join(., manual_input %>% select(-c(genero, especie)),
@@ -505,8 +508,8 @@ reproductive_traits_255 <-
                 sexual_system_modified == "D-P" | sexual_system_modified == "H-D" ~ "ssdio",
                 TRUE ~ sexual_system_modified)) %>%
 
-        arrange(accepted_species)  %>%
-        select(accepted_species, spcode, spcode_4_3, everything(), -c(genero, source))
+        arrange(accepted_species) %>%
+        select(accepted_species, spcode, spcode_4_3, everything())
 
 # Get leaf P and N traits ------------------------------------------------------
 
@@ -528,7 +531,7 @@ effect_traits_190 <-
         inner_join(., species_list_updated, by = c( "spcode")) %>%
         select(name_submitted, accepted_species, spcode, spcode_4_3,
                                                                 everything(),
-                                                                -c(X, familia,
+                                                                -c(familia,
                                                                     genero,
                                                                     especie))
 
@@ -540,7 +543,6 @@ traits_db_190 <-
                                                         "accepted_species")) %>%
 
         # No idea why this column keeps showing
-        select(-X) %>%
 
         mutate(n_p_ratio = n_mgg_1/p_mgg_1) %>%
 

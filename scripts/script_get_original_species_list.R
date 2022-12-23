@@ -30,7 +30,7 @@ data_species_full_list <-
     # Convert
     as_tibble(raw_data_species_list) %>%
 
-    mutate(spcode = coespec) %>%
+    rename(spcode = coespec) %>%
 
     select(familia, genero, especie, spcode) %>%
 

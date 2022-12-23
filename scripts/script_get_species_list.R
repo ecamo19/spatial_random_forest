@@ -49,4 +49,4 @@ print(paste0("The total number of species (species and morpho-species) is: ",
 
 
 # Save species list  -----------------------------------------------------------
-write.csv(data_species_full_list, "./data/cleaned_data/species_list.csv")
+write.csv(data_species_full_list, "./data/cleaned_data/original_species_list.csv")

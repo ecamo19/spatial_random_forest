@@ -514,7 +514,7 @@ reproductive_traits_190 <-
         select(accepted_species, spcode, spcode_4_3, everything())
 
 
-# Check spacies with NAs
+# Check species with NAs
 #reproductive_traits_190[!complete.cases(reproductive_traits_190),]
 
 # Manual edits, this info comes from Rolando Perez dataset
@@ -523,8 +523,5 @@ reproductive_traits_190[169, c(4, 5, 6, 7)] <- c("dani", NA, "ssher", "RPerez")
 # Replace "NA" with <NA>
 reproductive_traits_190[30, 5] <- NA
 
-
 # Save db ----------------------------------------------------------------------
 write.csv(reproductive_traits_190, "./data/cleaned_data/reproductive_traits_190.csv")
-
-

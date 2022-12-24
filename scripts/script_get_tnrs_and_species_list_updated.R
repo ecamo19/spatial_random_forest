@@ -23,23 +23,23 @@ source("./R/function_get_tnrs_names.R")
 
 ## Clean data ------------------------------------------------------------------
 
-species_list_no_morpho <-
+species_list_190 <-
 
     species_list %>%
 
-        # Remove morphospecies
+        # Remove morphospecies for using the TNRS
         filter(!(str_detect(especie, "^sp") & (str_length(especie) <= 4)))
 
 
 # Test single name -------------------------------------------------------------
 
-get_tnrs_names(species_list_no_morpho[2,]$genero,
-           species_list_no_morpho[2,]$especie)
+get_tnrs_names(species_list_190[2,]$genero,
+           species_list_190[2,]$especie)
 
 
 ## Iterate  --------------------------------------------------------------------
-tnrs_names <- map2_dfr(.x = species_list_no_morpho$genero,
-                       .y = species_list_no_morpho$especie,
+tnrs_names <- map2_dfr(.x = species_list_190$genero,
+                       .y = species_list_190$especie,
                        .f = get_tnrs_names)
 
 # Compare names ----------------------------------------------------------------

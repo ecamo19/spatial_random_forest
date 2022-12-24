@@ -46,7 +46,7 @@ tnrs_names <-
 
     # Change manually Species' name
     mutate(Accepted_species = if_else((Name_submitted == "Billia colombiana"),"Putzeysia rosea",
-                                            if_else(Name_submitted == "Hyeronima oblonga", "Stilaginella oblonga",Accepted_species))) %>%
+                                            if_else(Name_submitted == "Hyeronima oblonga", "Stilaginella oblonga", Accepted_species))) %>%
 
     # Species' reference manually changed
     mutate(Accepted_name_url = if_else((Name_submitted == "Billia colombiana"),"http://legacy.tropicos.org/Name/15500015",
@@ -99,9 +99,6 @@ names_spcodes <-
 
         # Create name_submitted column
         unite(name_submitted, c(genero, especie), sep = " ", remove = FALSE) %>%
-
-        # Remove morphospecies
-        #filter(!(str_detect(especie, "^sp") & (str_length(especie) <= 4))) %>%
 
         select(-c(genero, especie, familia))
 

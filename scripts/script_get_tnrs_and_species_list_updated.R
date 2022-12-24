@@ -32,10 +32,8 @@ species_list_190 <-
 
 
 # Test single name -------------------------------------------------------------
-
 get_tnrs_names(species_list_190[2,]$genero,
-           species_list_190[2,]$especie)
-
+                species_list_190[2,]$especie)
 
 ## Iterate  --------------------------------------------------------------------
 tnrs_names <- map2_dfr(.x = species_list_190$genero,
@@ -60,7 +58,7 @@ tnrs_names <-
     clean_names()
 
 
-# Create spcode with the first 4 characters from the genus and the first 3
+# Create New spcode with the first 4 characters from the genus and the first 3
 # letters from species
 
 species_list_new_spcodes <-
@@ -69,20 +67,27 @@ species_list_new_spcodes <-
         # Step done if mophospecies name == sp get it,
         # elif mophospecies name == sp{:digit:} get the 4 characters i.e sp01
 
-        # First get the first 4 letters from the genus
+        # First, get the first 4 letters from the genus
         mutate(gen4 = str_extract(genero, "^.{4}"),
 
-                # get the first 3 letters from the species
+                # Detect morphospecies
+                # if species name == sp, get the characters sp
                 sp3 = if_else(str_length(especie) == 2,
-                                        str_extract(especie, "^.{2}"), # nolint
+                                        str_extract(especie, "^.{2}"),
 
-                                        if_else((str_length(especie) > 2) & (str_length(especie) <= 4) & (str_detect(especie, "^sp")), # nolint
 
-                                     # Extract
-                                     str_extract(especie, "^.{4}"),
+                                        # If species name > 2 but <= 4 and
+                                        # starts with sp
+                                        if_else((str_length(especie) > 2) &
+                                        (str_length(especie) <= 4) &
+                                        (str_detect(especie, "^sp")),
 
-                                     # ELSE
-                                     str_extract(especie, "^.{3}")))) %>%
+                                                # Then extract i.e sp01
+                                                str_extract(especie, "^.{4}"),
+
+                                                # ELSE get the first 3 letters
+                                                # from the species
+                                                str_extract(especie, "^.{3}")))) %>%
 
         unite(spcode_4_3, c("gen4", "sp3"), sep = "") %>%
         arrange(spcode)
@@ -96,21 +101,21 @@ names_spcodes <-
         unite(name_submitted, c(genero, especie), sep = " ", remove = FALSE) %>%
 
         # Remove morphospecies
-        filter(!(str_detect(especie, "^sp") & (str_length(especie) <= 4))) %>%
+        #filter(!(str_detect(especie, "^sp") & (str_length(especie) <= 4))) %>%
 
         select(-c(genero, especie, familia))
 
-# Add spcodes 4-3 to the TNRS file ---------------------------------------------
-tnrs_species_list <-
-    tnrs_names %>%
-        dplyr::select(-id)  %>%
-        inner_join(., names_spcodes, by = "name_submitted") %>%
-        dplyr::select(spcode, spcode_4_3, everything())
-
 # Full species list with new spcodes -------------------------------------------
 # This list only shows the accepted name and the old name
+
 species_list_updated <-
-    tnrs_species_list %>%
+
+    tnrs_names %>%
+        dplyr::select(-id) %>%
+
+        # Join to add the accepted species name acording TNRS
+        left_join(names_spcodes, ., by = "name_submitted") %>%
+        dplyr::select(spcode, spcode_4_3, everything()) %>%
 
         # Species' name manually changed
         mutate(accepted_species = case_when(
@@ -118,16 +123,13 @@ species_list_updated <-
             name_submitted == "Hyeronima oblonga" ~ "Stilaginella oblonga",
             TRUE ~ accepted_species))  %>%
 
-        select(spcode, spcode_4_3, name_submitted, taxonomic_status,
-               accepted_species) %>%
+        select(spcode, spcode_4_3, name_submitted,accepted_species) %>%
         arrange(name_submitted) %>%
 
         # In this list Brosimum panamense is treat as a different species
         # and is not. Removed
         filter(!name_submitted == "Brosimum panamense",
-               !name_submitted == "Hirtella media") %>%
-
-        select(-taxonomic_status)
+               !name_submitted == "Hirtella media")
 
 # Save data --------------------------------------------------------------------
 write.csv(tnrs_names, "./data/cleaned_data/tnrs_names.csv")

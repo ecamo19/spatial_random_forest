@@ -38,17 +38,16 @@ rule get_tnrs_and_species_list_updated:
                         --out {output.data_1} \
                         --out {output.data_2}
                 """
-
-rule create_traits_db:
+rule get_reproductive_traits:
         input:
-                script = "scripts/script_trait_db_construction.R",
+                script = "scripts/script_get_reproductive_traits.R",
                 data_1 = "data/cleaned_data/species_list_updated.csv",
                 data_2 = "data/raw_data/raw_salgado_original.xls",
                 data_3 = "data/raw_data/raw_chazdon_2003.html",
                 data_4 = "data/raw_data/raw_nzamora_original.xlsx",
                 data_5 = "data/raw_data/raw_data_vargas.RData"
         output:
-                data = "data/cleaned_data/db_traits_190.csv"
+                data = "data/cleaned_data/reproductive_traits_190.csv"
         shell:
                 """
                 Rscript {input.script} \
@@ -59,6 +58,27 @@ rule create_traits_db:
                         --data {input.data_5} \
                         --out {output.data}
                 """
+
+#rule create_traits_db:
+#        input:
+#                script = "scripts/script_trait_db_construction.R",
+#                data_1 = "data/cleaned_data/species_list_updated.csv",
+#                data_2 = "data/cleaned_data/reproductive_traits_190.csv"
+#                data_3 = "data/raw_data/effect_traits_190.csv"
+#                #data_4 =
+#                #data_5 =
+#        output:
+#                data = "data/cleaned_data/db_traits_255.csv"
+#        shell:
+#                """
+#                Rscript {input.script} \
+#                        --data {input.data_1} \
+#                        --data {input.data_2} \
+#                        --data {input.data_3} \
+#                        --data {input.data_4} \
+#                        --data {input.data_5} \
+#                        --out {output.data}
+#                """
 
 rule create_env_data:
         input:

@@ -23,13 +23,25 @@ library(tabulizer)
 library(tibble)
 
 # Species list updated ---------------------------------------------------------
-species_list_updated_190 <-
+species_list_updated <-
                         read.csv("./data/cleaned_data/species_list_updated.csv",
                                 header = TRUE) %>%
                         select(-X)
 
-# Get Reproductive traits ------------------------------------------------------
+species_list_190 <-
+    species_list_updated %>%
 
+        # Get genus and species
+        separate(name_submitted, c("genus", "specie"), sep = " ", remove = FALSE) %>%
+
+        # Remove morphospecies
+        filter(!(str_detect(specie, "^sp") & (str_length(specie) <= 4))) %>%
+
+        # Remove genus and species
+        select(-c(genus, specie))
+
+
+# Get Reproductive traits ------------------------------------------------------
 
 ## Species with traits in Salgado dataset --------------------------------------
 
@@ -37,7 +49,6 @@ species_list_updated_190 <-
 raw_salgado_traits <-
                 read_xls("./data/raw_data/raw_salgado_original.xls") %>%
                 clean_names()
-
 
 ## Search
 # This dataset contains the original trait name and the modified one
@@ -142,7 +153,7 @@ data_chazdon_traits <-
                                 replacement = ""))  %>%
 
         # removing authority
-        separate(species, c("genero", "especie"))    %>%
+        separate(species, c("genero", "especie")) %>%
 
         # Rename levels in dispersion column
         mutate(dispersal_syndrome_modified = case_when(

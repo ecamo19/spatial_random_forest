@@ -28,7 +28,7 @@ species_list_updated <-
                                 header = TRUE) %>%
                         select(-X)
 
-species_list_190 <-
+species_list_updated_190 <-
     species_list_updated %>%
 
         # Get genus and species

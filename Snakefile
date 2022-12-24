@@ -93,8 +93,18 @@ rule create_env_data:
 #rule create_species_abundance_data:
 #Remember to remove sps
 
-#rule create_agb_by_plot_data:
-#Remember to remove sps
+rule calculate_agb_by_plot:
+        input:
+                script = "scripts/script_get_agb_for_each_plot",
+                data = "data/raw_data/raw_species_basal_area.csv"
+        output:
+                data = "data/cleaned_data/env_data.csv"
+        shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data} \
+                        --out {output.data}
+                """
 
 
 #rule create_functional_diversity_data:

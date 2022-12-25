@@ -126,8 +126,7 @@ rule clean_species_abundance_data:
                         --data {input.data_2} \
                         --out {output.data}
                 """
-#Remember to remove sps
 
-#rule create_functional_diversity_data:
+#rule estimate_functional_diversity_data:
 
 #rule create_data_set_for_stats:

@@ -12,7 +12,8 @@ rule targets:
                 "data/cleaned_data/env_data.csv",
                 "data/raw_data/raw_species_basal_area.xlsx",
                 "data/raw_data/lat_long_plots.csv",
-                "data/cleaned_data/plot_agb.csv"
+                "data/cleaned_data/plot_agb.csv",
+                "data/cleaned_data/species_abundance_data.csv"
 
 rule get_original_species_list:
         input:
@@ -111,7 +112,20 @@ rule calculate_plot_agb:
                         --out {output.data}
                 """
 
-#rule create_species_abundance_data:
+rule clean_species_abundance_data:
+        input:
+                script = "scripts/script_clean_species_abundance_data.R",
+                data_1 = "data/raw_data/raw_species_abundance.xlsx",
+                data_2 = "data/cleaned_data/species_list_updated.csv"
+        output:
+                data = "data/cleaned_data/species_abundance_data.csv"
+        shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data_1} \
+                        --data {input.data_2} \
+                        --out {output.data}
+                """
 #Remember to remove sps
 
 #rule create_functional_diversity_data:

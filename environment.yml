@@ -25,6 +25,7 @@ dependencies:
 - r-biomass=2.1.8
 - r-fd=1.0_12.1
 - r-gtools=3.9.2.1
+- r-ape=5.6
 - python=3.9.10
 - shap=0.41.0
 - parallel=20221122

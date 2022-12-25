@@ -24,6 +24,7 @@ dependencies:
 - r-proj4=1.0_12
 - r-biomass=2.1.8
 - r-fd=1.0_12.1
+- r-gtools=3.9.2.1
 - python=3.9.10
 - shap=0.41.0
 - parallel=20221122

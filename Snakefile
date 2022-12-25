@@ -9,7 +9,10 @@ rule targets:
                 "data/raw_data/raw_data_vargas.RData",
                 "data/raw_data/raw_effect_traits.csv",
                 "data/cleaned_data/traits_db_255.csv",
-                "data/cleaned_data/env_data.csv"
+                "data/cleaned_data/env_data.csv",
+                "data/raw_data/raw_species_basal_area.xlsx",
+                "data/raw_data/lat_long_plots.csv",
+                "data/cleaned_data/plot_agb.csv"
 
 rule get_original_species_list:
         input:
@@ -90,22 +93,26 @@ rule create_env_data:
                         --data {input.data} \
                         --out {output.data}
                 """
-#rule create_species_abundance_data:
-#Remember to remove sps
 
-rule calculate_agb_by_plot:
+rule calculate_plot_agb:
         input:
-                script = "scripts/script_get_agb_for_each_plot",
-                data = "data/raw_data/raw_species_basal_area.csv"
+                script = "scripts/script_calculate_plot_agb.R",
+                data_1 = "data/raw_data/raw_species_basal_area.xlsx",
+                data_2 = "data/raw_data/lat_long_plots.csv",
+                data_3 = "data/cleaned_data/traits_db_255.csv"
         output:
-                data = "data/cleaned_data/env_data.csv"
+                data = "data/cleaned_data/plot_agb.csv"
         shell:
                 """
                 Rscript {input.script} \
-                        --data {input.data} \
+                        --data {input.data_1} \
+                        --data {input.data_2} \
+                        --data {input.data_3} \
                         --out {output.data}
                 """
 
+#rule create_species_abundance_data:
+#Remember to remove sps
 
 #rule create_functional_diversity_data:
 

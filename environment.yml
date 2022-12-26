@@ -31,11 +31,7 @@ dependencies:
 - shap=0.41.0
 - parallel=20221122
 - radian=0.6.4
-- libgdal=3.6.1
 - snakemake=7.19.1
 - graphviz=2.50.0
-- pcre2=10.40
-- libffi=3.4
-- proj=9.1.0
 
 

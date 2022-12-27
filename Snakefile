@@ -1,6 +1,6 @@
 singularity:"docker://continuumio/miniconda3"
 
-rule targets:
+rule all:
         input:
                 "data/cleaned_data/original_species_list.csv",
                 "data/cleaned_data/tnrs_names.csv",

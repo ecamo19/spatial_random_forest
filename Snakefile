@@ -13,7 +13,8 @@ rule targets:
                 "data/raw_data/raw_species_basal_area.xlsx",
                 "data/raw_data/lat_long_plots.csv",
                 "data/cleaned_data/plot_agb.csv",
-                "data/cleaned_data/species_abundance_data.csv"
+                "data/cleaned_data/species_abundance_data.csv",
+                "data/cleaned_data/redundancy_and_functional_diversity.csv"
 
 rule get_original_species_list:
         input:
@@ -127,6 +128,19 @@ rule clean_species_abundance_data:
                         --out {output.data}
                 """
 
-#rule estimate_functional_diversity_data:
+rule estimate_redundancy_and_functional_diversity:
+        input:
+                script = "scripts/script_estimate_redundancy_and_functional_diversity.R",
+                data_1 = "data/cleaned_data/species_abundance_data.csv",
+                data_2 = "data/cleaned_data/traits_db_255.csv"
+        output:
+                data = "data/cleaned_data/redundancy_and_functional_diversity.csv"
+        shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data_1} \
+                        --data {input.data_2} \
+                        --out {output.data}
+                """
 
 #rule create_data_set_for_stats:

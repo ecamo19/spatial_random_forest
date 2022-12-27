@@ -1,3 +1,5 @@
+singularity:"docker://continuumio/miniconda3"
+
 rule targets:
         input:
                 "data/cleaned_data/original_species_list.csv",

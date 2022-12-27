@@ -11,10 +11,25 @@ rule targets:
                 "data/cleaned_data/traits_db_255.csv",
                 "data/cleaned_data/env_data.csv",
                 "data/raw_data/raw_species_basal_area.xlsx",
-                "data/raw_data/lat_long_plots.csv",
                 "data/cleaned_data/plot_agb.csv",
                 "data/cleaned_data/species_abundance_data.csv",
-                "data/cleaned_data/redundancy_and_functional_diversity.csv"
+                "data/cleaned_data/redundancy_and_functional_diversity.csv",
+                "data/raw_data/raw_plots_lat_lon_crtm05.csv",
+                "data/cleaned_data/plots_long_lat_wgs84.csv"
+
+rule transform_crtm05_coords_to_wgs84:
+        input:
+                script = "scripts/script_transform_lat_long_to_wgs84.R",
+                data = "data/raw_data/raw_plots_lat_lon_crtm05.csv"
+        output:
+                data = "data/cleaned_data/plots_long_lat_wgs84.csv"
+        shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data} \
+                        --out {output.data}
+                """
+
 
 rule get_original_species_list:
         input:
@@ -100,7 +115,7 @@ rule calculate_plot_agb:
         input:
                 script = "scripts/script_calculate_plot_agb.R",
                 data_1 = "data/raw_data/raw_species_basal_area.xlsx",
-                data_2 = "data/raw_data/lat_long_plots.csv",
+                data_2 = "data/cleaned_data/plots_long_lat_wgs84.csv",
                 data_3 = "data/cleaned_data/traits_db_255.csv"
         output:
                 data = "data/cleaned_data/plot_agb.csv"

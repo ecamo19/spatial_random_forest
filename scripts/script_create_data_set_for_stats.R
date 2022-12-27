@@ -6,28 +6,31 @@ here::i_am("scripts/script_create_data_set_for_stats.R")
 
 # Load packages -----------------------------------------------------------------
 library(dplyr)
+library(janitor)
 
 # Load data sets ----------------------------------------------------------------
 
 env_data <-
     read.csv("./data/cleaned_data/env_data.csv") %>% dplyr::select(-X)
 
+lat_long_plots <-
+    read.csv("./data/raw_data/lat_long_plots.csv") %>%
+    clean_names()
+
 plot_agb <-
     read.csv("./data/cleaned_data/plot_agb.csv") %>% dplyr::select(-X)
+
 
 redundancy_and_functional_diversity <-
     read.csv("./data/cleaned_data/redundancy_and_functional_diversity.csv") %>%
         dplyr::select(-X)
 
-lat_long_plots <-
-    read.csv("./data/raw_data/lat_long_plots.csv")
-
-
 # Join data ---------------------------------------------------------------------
+summary(lat_long_plots)
+summary(env_data)
 
-inner_join(plot_agb, env_data, by = "plot")
+inner_join(lat_long_plots, env_data, by = c("crtm_90_x,crtm_90_y"))
 plot_agb
-
 
 
 # Removing predictors that give the same information. This was decided based on

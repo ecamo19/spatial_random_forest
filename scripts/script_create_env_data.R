@@ -41,7 +41,7 @@ env_data <-
         arrange(plot) %>%
 
         # Remove features
-        dplyr::select(!1:4, -tempmin, -slope_deg, -limo, -precdriest) %>%
+        dplyr::select(-c(forest_type, tempmin, slope_deg, limo, precdriest)) %>%
 
         # Remove last row with NAs
         na.omit()

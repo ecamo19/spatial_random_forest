@@ -1,15 +1,34 @@
-here::i_am("scripts/data_cleaned.R")
-setwd(here::here())
+# Objective ---------------------------------------------------------------------
+# Gather all necessary data sets for creating a single one called
+# data_set_for_stats
 
-# Load package for pipe --------------------------------------------------------
-library(magrittr)
+here::i_am("scripts/script_create_data_set_for_stats.R")
 
-# Load data --------------------------------------------------------------------
-data_complete <-
-    read.csv("./data/functional_diversity_redundancy_indices/data_functional_diversity.csv") %>%
-    dplyr::select(-X)
+# Load packages -----------------------------------------------------------------
+library(dplyr)
 
-# Clean data -------------------------------------------------------------------
+# Load data sets ----------------------------------------------------------------
+
+env_data <-
+    read.csv("./data/cleaned_data/env_data.csv") %>% dplyr::select(-X)
+
+plot_agb <-
+    read.csv("./data/cleaned_data/plot_agb.csv") %>% dplyr::select(-X)
+
+redundancy_and_functional_diversity <-
+    read.csv("./data/cleaned_data/redundancy_and_functional_diversity.csv") %>%
+        dplyr::select(-X)
+
+lat_long_plots <-
+    read.csv("./data/raw_data/lat_long_plots.csv")
+
+
+# Join data ---------------------------------------------------------------------
+
+inner_join(plot_agb, env_data, by = "plot")
+plot_agb
+
+
 
 # Removing predictors that give the same information. This was decided based on
 # a corr plot

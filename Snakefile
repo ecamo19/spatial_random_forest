@@ -17,6 +17,9 @@ rule targets:
                 "data/raw_data/raw_plots_lat_lon_crtm05.csv",
                 "data/cleaned_data/plots_long_lat_wgs84.csv"
 
+conda:
+        "envs/environment.yml"
+
 rule transform_crtm05_coords_to_wgs84:
         input:
                 script = "scripts/script_transform_lat_long_to_wgs84.R",

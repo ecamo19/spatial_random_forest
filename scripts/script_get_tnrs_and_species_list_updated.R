@@ -9,7 +9,6 @@ library(janitor)
 library(tidyr)
 library(readr)
 library(stringr)
-#devtools::install_github('https://github.com/EnquistLab/RTNRS')
 library(TNRS)
 
 # Load species list ------------------------------------------------------------

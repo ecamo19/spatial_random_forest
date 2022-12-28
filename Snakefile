@@ -1,4 +1,4 @@
-singularity:"docker://continuumio/miniconda3"
+container:"docker://continuumio/miniconda3"
 
 rule all:
         input:

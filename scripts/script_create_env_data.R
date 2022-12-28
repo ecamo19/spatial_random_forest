@@ -48,3 +48,6 @@ env_data <-
 
 # Save data --------------------------------------------------------------------
 write.csv(env_data, "./data/cleaned_data/env_data.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

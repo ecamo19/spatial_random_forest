@@ -77,3 +77,6 @@ traits_db_255 <-
 
 # Save db ----------------------------------------------------------------------
 write.csv(traits_db_255, "./data/cleaned_data/traits_db_255.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

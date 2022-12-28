@@ -45,5 +45,5 @@ data_for_analysis <-
 # Save data ---------------------------------------------------------------------
 write.csv(data_for_analysis, "./data/cleaned_data/data_for_analysis.csv")
 
-# Clean env at the end
+# Clean env at the end ----------------------------------------------------------
 rm(list = ls())

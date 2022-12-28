@@ -89,3 +89,6 @@ plot_agb <- summaryByPlot(computeAGB(D = dbh_wd_per_plot$dbh_cm,
 
 # Save db ----------------------------------------------------------------------
 write.csv(plot_agb, "./data/cleaned_data/plot_agb.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

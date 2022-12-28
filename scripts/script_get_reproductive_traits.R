@@ -536,3 +536,6 @@ reproductive_traits_190[30, 5] <- NA
 
 # Save db ----------------------------------------------------------------------
 write.csv(reproductive_traits_190, "./data/cleaned_data/reproductive_traits_190.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

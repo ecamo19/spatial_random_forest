@@ -55,3 +55,6 @@ print(paste0("The total number of species (species and morpho-species) is: ",
 
 # Save species list  -----------------------------------------------------------
 write.csv(data_species_full_list, "./data/cleaned_data/original_species_list.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

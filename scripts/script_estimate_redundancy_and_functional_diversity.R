@@ -168,3 +168,6 @@ redundancy_and_functional_diversity <-
 # Save data ---------------------------------------------------------------------
 write.csv(redundancy_and_functional_diversity,
                 "./data/cleaned_data/redundancy_and_functional_diversity.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

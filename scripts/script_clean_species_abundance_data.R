@@ -49,3 +49,6 @@ species_abundance_data <-
 
 # Save data ---------------------------------------------------------------------
 write.csv(species_abundance_data, "./data/cleaned_data/species_abundance_data.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

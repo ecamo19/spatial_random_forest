@@ -49,3 +49,6 @@ plots_wgs84 <-
 
 # Save data ---------------------------------------------------------------------
 write.csv(plots_wgs84, "./data/cleaned_data/plots_long_lat_wgs84.csv")
+
+# Clean env at the end ----------------------------------------------------------
+rm(list = ls())

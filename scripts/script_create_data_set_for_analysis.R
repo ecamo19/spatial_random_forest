@@ -39,8 +39,8 @@ data_for_analysis <-
 
         # Arrange and remove columns
         select(plot, x_wgs84, y_wgs84, AGB, n, u, redundancy, f_dis,everything(),
-                -c(crtm_90_y,crtm_90_x, d, q, rao_q, f_eve)) %>%
-        rename(n_species = n, uniqueness = u)
+                -c(crtm_90_y,crtm_90_x, d, q, u, rao_q, f_eve, p_h)) %>%
+        rename(n_species = n)
 
 # Save data ---------------------------------------------------------------------
 write.csv(data_for_analysis, "./data/cleaned_data/data_for_analysis.csv")

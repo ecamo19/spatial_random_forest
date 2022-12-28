@@ -38,5 +38,6 @@ dependencies:
 - snakemake=7.19.1
 - graphviz=2.50.0
 - notebook=6.5.2
+- pandas=1.5.2
 
 

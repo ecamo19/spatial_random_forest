@@ -17,7 +17,8 @@ rule all:
                 "data/cleaned_data/species_abundance_data.csv",
                 "data/cleaned_data/redundancy_and_functional_diversity.csv",
                 "data/raw_data/raw_plots_lat_lon_crtm05.csv",
-                "data/cleaned_data/plots_long_lat_wgs84.csv"
+                "data/cleaned_data/plots_long_lat_wgs84.csv",
+                "data/cleaned_data/data_for_analysis.csv"
 
 rule transform_crtm05_coords_to_wgs84:
         input:
@@ -160,4 +161,21 @@ rule estimate_redundancy_and_functional_diversity:
                         --out {output.data}
                 """
 
-#rule create_data_set_for_stats:
+rule create_data_set_for_analysis:
+        input:
+                script = "scripts/script_create_data_set_for_analysis.R",
+                data_1 = "data/cleaned_data/env_data.csv",
+                data_2 = "data/cleaned_data/plots_long_lat_wgs84.csv",
+                data_3 = "data/cleaned_data/plot_agb.csv",
+                data_4 = "data/cleaned_data/redundancy_and_functional_diversity.csv"
+        output:
+                data = "data/cleaned_data/data_for_analysis.csv"
+        shell:
+                """
+                Rscript {input.script} \
+                        --data {input.data_1} \
+                        --data {input.data_2} \
+                        --data {input.data_3} \
+                        --data {input.data_4} \
+                        --out {output.data}
+                """

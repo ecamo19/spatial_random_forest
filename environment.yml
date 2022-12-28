@@ -37,5 +37,6 @@ dependencies:
 - radian=0.6.4
 - snakemake=7.19.1
 - graphviz=2.50.0
+- notebook=6.5.2
 
 

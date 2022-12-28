@@ -1,0 +1,10 @@
+The main idea of this new analisys is:
+
+1) Remove traits like polinization
+
+2) Add the species number to the analysis data frame and use it as predictor
+
+3) Add ABG as response variable
+
+
+  

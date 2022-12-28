@@ -1,0 +1,40 @@
+name: spatial_random_forest
+channels:
+- conda-forge
+- r
+- ecamo19
+- base
+- bioconda
+dependencies:
+- r-base=4.1.3
+- r-caret=6.0_92
+- r-rgdal=1.5_32
+- r-tnrs=0.3.1
+- r-tidyverse=1.3.1
+- r-randomforestsgls=0.1.4
+- r-furrr=0.3.1
+- r-here=1.0.1
+- r-fastshap=0.0.7
+- r-devtools=2.4.5
+- r-janitor=2.1.0
+- r-reactable=0.4.1
+- r-rvest=1.0.2
+- r-readxl=1.4.1
+- r-tabulizer=0.2.2
+- r-sf=1.0_7
+- r-terra=1.5_21
+- r-raster=3.5_21
+- r-proj4=1.0_12
+- r-biomass=2.1.8
+- r-fd=1.0_12.1
+- r-gtools=3.9.2.1
+- r-ape=5.6
+- r-gawdis=0.1.3
+- python=3.9.10
+- shap=0.41.0
+- parallel=20221122
+- radian=0.6.4
+- snakemake=7.19.1
+- graphviz=2.50.0
+
+

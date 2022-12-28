@@ -2,4 +2,4 @@
 
 ## Workflow
 
-![Analysis workflow](dag.jpg)
+![Analysis workflow](dag.svg)
